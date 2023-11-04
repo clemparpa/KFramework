@@ -15,9 +15,9 @@ class NormSensitivityStop(StopRule):
         super().__init__(model)
         self.sensitivity: float = sensitivity
         self.norm = norm
-        self.tags = model.tags.copy()
+        self.tags = model.tags.copy() if hasattr(model, "tags") else None
 
     def __call__(self) -> bool:
-        stop = self.norm(self.model.tags - self.tags) < self.sensitivity  # type: ignore
+        stop = self.norm(self.model.tags - self.tags) < self.sensitivity if self.tags is not None else False  # type: ignore
         self.tags = self.model.tags.copy()  # type: ignore
         return stop and super().__call__()  # type: ignore
