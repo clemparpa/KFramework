@@ -12,7 +12,6 @@ class LloydCentroidsAlgorithm:
         self.centroids: NDArray
         self.clusters: NDArray
         self.step_counter = array(0)
-        self.variance: NDArray = array(0)
 
     def assign_clusters(self, X: NDArray):
         self.clusters = argmin(self.distance(X, expand_dims(self.centroids, 1)), axis=0)
@@ -25,17 +24,7 @@ class LloydCentroidsAlgorithm:
                     X[self.clusters == cluster], axis=0
                 )
 
-    def compute_variation(self, X: NDArray):
-        for cluster, centroid in enumerate(self.centroids):
-            cluster_data = X[self.clusters == cluster]
-            cluster_count = len(cluster_data) > 0
-            if cluster_count > 0:
-                self.variance[cluster] = (
-                    np_sum(self.distance(cluster_data, centroid)) / cluster_count
-                )
-
     def step(self, X: NDArray):
         self.assign_clusters(X)
         self.update_centroids(X)
-        self.compute_variation(X)
         self.step_counter += 1

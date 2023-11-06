@@ -1,8 +1,9 @@
-from kframework.utils.protocols import Counter
+from typing import Generic
+from kframework.model.protocols import T_model
 
 
-class StopRule:
-    def __init__(self, model: Counter):
+class StopRule(Generic[T_model]):
+    def __init__(self, model: T_model):
         self.model = model
 
     def __call__(self) -> bool:
